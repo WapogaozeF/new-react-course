@@ -4,17 +4,32 @@ const initialGameBoard = [
 	[null, null, null],
 ];
 
-export default function GameBoard() {
+export default function GameBoard({ onSelectSquare, turns }) {
+	const gameBoard = initialGameBoard;
+
+	for (const turn of turns) {
+		const { square, player } = turn;
+		const { row, col } = square;
+
+		gameBoard[row][col] = player;
+	}
+
 	return (
 		<ol id="game-board">
-			{initialGameBoard.map((row, rowIndex) => (
+			{gameBoard.map((row, rowIndex) => (
 				// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
 				<li key={rowIndex}>
 					<ol>
 						{row.map((playerSymbol, colIndex) => (
 							// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
 							<li key={colIndex}>
-								<button type="button">{playerSymbol}</button>
+								<button
+									onClick={() => onSelectSquare(rowIndex, colIndex)}
+									type="button"
+									disabled={playerSymbol !== null}
+								>
+									{playerSymbol}
+								</button>
 							</li>
 						))}
 					</ol>
