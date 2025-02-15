@@ -37,7 +37,7 @@ export default function TimerChallenge({ title, targetTime }) {
 				ref={dialog}
 				targetTime={targetTime}
 				remainingTime={timerRemaining}
-        onReset={handleReset}
+				onReset={handleReset}
 			/>
 			<section className="challenge">
 				<h2>{title}</h2>
@@ -45,7 +45,10 @@ export default function TimerChallenge({ title, targetTime }) {
 					{targetTime} second{targetTime > 1 ? "s" : ""}
 				</p>
 				<p>
-					<button onClick={timerIsActive ? handleStop : handleStart}>
+					<button
+						type="button"
+						onClick={timerIsActive ? handleStop : handleStart}
+					>
 						{timerIsActive ? "Stop" : "Start"} Challenge
 					</button>
 				</p>
