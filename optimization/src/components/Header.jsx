@@ -1,7 +1,8 @@
+import React, { memo } from 'react';
 import { log } from '../log.js';
 import logoImg from '../assets/logo.png';
 
-export default function Header() {
+export default memo(function Header() {
   log('<Header /> rendered', 1);
 
   return (
@@ -10,4 +11,4 @@ export default function Header() {
       <h1>React - Behind The Scenes</h1>
     </header>
   );
-}
+});
