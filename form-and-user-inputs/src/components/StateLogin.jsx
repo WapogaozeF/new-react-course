@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Input from "./Input";
 import { isEmail, isNotEmpty, hasMinLength } from "../util/validation";
 import { useInput } from "../hooks/useInput";
@@ -22,7 +21,7 @@ export default function StateLogin() {
 
 	function handleSubmit(event) {
 		event.preventDefault();
-		
+
 		if (emailHasError || passwordHasError) {
 			return;
 		}
