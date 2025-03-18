@@ -9,7 +9,7 @@ export function tokenLoader() {
 	return getAuthToken();
 }
 
-export function checkAuth() {
+export function checkAuthLoader() {
 	const token = getAuthToken();
 
 	if (!token) {
