@@ -11,7 +11,7 @@ export async function action({ request }) {
 	const searchParams = new URL(request.url).searchParams;
 	const mode = searchParams.get("mode") || "login";
 
-  if (mode !== "signup" && mode !== "login") {
+	if (mode !== "signup" && mode !== "login") {
 		throw new Response(JSON.stringify({ message: "Unsupported mode." }), {
 			status: 422,
 		});
@@ -42,5 +42,9 @@ export async function action({ request }) {
 		);
 	}
 
+	const { token } = await response.json();
+
+	localStorage.setItem("token", token);
+  
 	return redirect("/");
 }
