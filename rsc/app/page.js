@@ -3,6 +3,7 @@ import fs from "node:fs/promises";
 import { Suspense } from "react";
 
 import UsePromiseDemo from "@/components/UsePromisesDemo";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 export default function Home() {
 	const fetchUsersPromise = new Promise((resolve) =>
@@ -15,9 +16,11 @@ export default function Home() {
 
 	return (
 		<main>
-			<Suspense fallback={<p>Loading users...</p>}>
-				<UsePromiseDemo usersPromise={fetchUsersPromise} />
-			</Suspense>
+			<ErrorBoundary>
+				<Suspense fallback={<p>Loading users...</p>}>
+					<UsePromiseDemo usersPromise={fetchUsersPromise} />
+				</Suspense>
+			</ErrorBoundary>
 		</main>
 	);
 }
