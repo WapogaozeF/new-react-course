@@ -1,20 +1,8 @@
-import fs from "node:fs";
+"use client";
+
+import { saveUserAction } from "@/actions/user";
 
 export default function ServerActionsDemo() {
-	async function saveUserAction(formData) {
-		"use server";
-		const data = fs.readFileSync("dummy-db.json", "utf-8");
-		const instructors = JSON.parse(data);
-		const newInstructor = {
-			id: new Date().getTime().toString(),
-			name: formData.get("name"),
-			title: formData.get("title"),
-		};
-
-		instructors.push(newInstructor);
-		fs.writeFileSync("dummy-db.json", JSON.stringify(instructors));
-	}
-
 	return (
 		<div className="rsc">
 			<h2>Server Actions</h2>
