@@ -48,7 +48,7 @@ export default function ChallengeItem({
 						<button onClick={onViewDetails}>
 							View Details{" "}
 							<motion.span
-								animate={{ rotate: isExpanded ? 0 : 180 }}
+								animate={{ rotate: isExpanded ? 180 : 0 }}
 								className="challenge-item-details-icon"
 							>
 								&#9650;
