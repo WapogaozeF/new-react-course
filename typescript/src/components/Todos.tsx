@@ -1,10 +1,15 @@
-function Todos() {
-  return (
-    <ul>
-      <li>Learn React</li>
-      <li>Learn TypeScript</li>
-    </ul>
-  )
-}
+import type React from "react";
+import type Todo from "../model/todo";
+import TodoItem from "./TodoItem";
+
+const Todos: React.FC<{ items: Todo[] }> = (props) => {
+	return (
+		<ul>
+			{props.items.map((item) => (
+				<TodoItem key={item.id} text={item.text} />
+			))}
+		</ul>
+	);
+};
 
 export default Todos;
