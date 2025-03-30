@@ -2,6 +2,7 @@ import { useAppStore } from "./store/store";
 
 import classes from "./App.module.css";
 import ProductsList from "./components/ProductsList";
+import Todos from "./components/Todos";
 
 function App() {
 	const count = useAppStore((state) => state.count);
@@ -10,6 +11,7 @@ function App() {
 		<>
 			<OtherComponent count={count} />
 			<ProductsList />
+			<Todos />
 		</>
 	);
 }
