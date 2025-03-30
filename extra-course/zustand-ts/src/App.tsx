@@ -1,16 +1,22 @@
-import { useCounterStore } from "./store";
+import { useAppStore } from "./store/store";
 
 import classes from "./App.module.css";
+import ProductsList from "./components/ProductsList";
 
 function App() {
-	const count = useCounterStore((state) => state.count);
+	const count = useAppStore((state) => state.count);
 
-	return <OtherComponent count={count} />;
+	return (
+		<>
+			<OtherComponent count={count} />
+			<ProductsList />
+		</>
+	);
 }
 
 const OtherComponent = ({ count }: { count: number }) => {
-	const incrementAsync = useCounterStore((state) => state.incrementAsync);
-	const decrement = useCounterStore((state) => state.decrement);
+	const incrementAsync = useAppStore((state) => state.incrementAsync);
+	const decrement = useAppStore((state) => state.decrement);
 
 	return (
 		<div className={classes.count}>

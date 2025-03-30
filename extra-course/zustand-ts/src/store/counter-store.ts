@@ -1,13 +1,18 @@
-import { create } from "zustand";
+import type { StateCreator } from "zustand";
 
-type CounterStore = {
+type CounterState = {
 	count: number;
+};
+
+type CounterActions = {
 	increment: () => void;
 	incrementAsync: () => Promise<void>;
 	decrement: () => void;
 };
 
-export const useCounterStore = create<CounterStore>((set) => ({
+export type CounterSlice = CounterState & CounterActions;
+
+export const createCounterSlice: StateCreator<CounterSlice> = (set) => ({
 	count: 0,
 	increment: () => {
 		set((state) => ({
@@ -25,4 +30,4 @@ export const useCounterStore = create<CounterStore>((set) => ({
 			count: state.count - 1,
 		}));
 	},
-}));
+});
