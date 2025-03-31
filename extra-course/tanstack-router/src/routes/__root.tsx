@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Outlet, createRootRoute } from "@tanstack/react-router";
+import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
+import { Link, Outlet, createRootRoute } from "@tanstack/react-router";
 
 export const Route = createRootRoute({
 	component: RootComponent,
@@ -8,9 +9,17 @@ export const Route = createRootRoute({
 function RootComponent() {
 	return (
 		<React.Fragment>
-			<div>Hello "__root"!</div>
+			<div>
+				<Link to="/">Home</Link>
+				{/* <Link to="/posts" search={{ q: "post1" }}>
+					Posts
+				</Link> */}
+				<Link to="/posts">Posts</Link>
+				<Link to="/about">About</Link>
+			</div>
 			<Outlet />
-      <footer>"__root" footer.</footer>
+			<footer>"__root" footer.</footer>
+			<TanStackRouterDevtools />
 		</React.Fragment>
 	);
 }
