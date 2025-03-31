@@ -1,25 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
 import { getUsers } from "./api/user";
 import { useUserStore } from "./state/userStore";
-import { useEffect } from "react";
 
 function App() {
-	const { users, setUsers } = useUserStore();
+	const { filters } = useUserStore();
 
 	const { data } = useQuery({
-		queryKey: ["users"],
-		queryFn: () => getUsers(),
+		queryKey: ["users", filters],
+		queryFn: () => getUsers(filters),
 	});
-
-	useEffect(() => {
-		if (data) {
-			setUsers(data);
-		}
-	}, [data, setUsers]);
 
 	return (
 		<div>
-			{users.map((user) => (
+			<FiltersComponent />
+			{data?.map((user) => (
 				<div key={user.id}>{user.name}</div>
 			))}
 		</div>
@@ -27,3 +21,9 @@ function App() {
 }
 
 export default App;
+
+function FiltersComponent() {
+	const { setFilters } = useUserStore();
+
+	return null;
+}
