@@ -11,11 +11,19 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as EventsImport } from './routes/events'
 import { Route as IndexImport } from './routes/index'
 import { Route as NewsletterIndexImport } from './routes/newsletter/index'
 import { Route as EventsIndexImport } from './routes/events/index'
+import { Route as EventsEventIdImport } from './routes/events/$eventId'
 
 // Create/Update Routes
+
+const EventsRoute = EventsImport.update({
+  id: '/events',
+  path: '/events',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
@@ -30,9 +38,15 @@ const NewsletterIndexRoute = NewsletterIndexImport.update({
 } as any)
 
 const EventsIndexRoute = EventsIndexImport.update({
-  id: '/events/',
-  path: '/events/',
-  getParentRoute: () => rootRoute,
+  id: '/',
+  path: '/',
+  getParentRoute: () => EventsRoute,
+} as any)
+
+const EventsEventIdRoute = EventsEventIdImport.update({
+  id: '/$eventId',
+  path: '/$eventId',
+  getParentRoute: () => EventsRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -46,12 +60,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/events/': {
-      id: '/events/'
+    '/events': {
+      id: '/events'
       path: '/events'
       fullPath: '/events'
-      preLoaderRoute: typeof EventsIndexImport
+      preLoaderRoute: typeof EventsImport
       parentRoute: typeof rootRoute
+    }
+    '/events/$eventId': {
+      id: '/events/$eventId'
+      path: '/$eventId'
+      fullPath: '/events/$eventId'
+      preLoaderRoute: typeof EventsEventIdImport
+      parentRoute: typeof EventsImport
+    }
+    '/events/': {
+      id: '/events/'
+      path: '/'
+      fullPath: '/events/'
+      preLoaderRoute: typeof EventsIndexImport
+      parentRoute: typeof EventsImport
     }
     '/newsletter/': {
       id: '/newsletter/'
@@ -65,14 +93,30 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
+interface EventsRouteChildren {
+  EventsEventIdRoute: typeof EventsEventIdRoute
+  EventsIndexRoute: typeof EventsIndexRoute
+}
+
+const EventsRouteChildren: EventsRouteChildren = {
+  EventsEventIdRoute: EventsEventIdRoute,
+  EventsIndexRoute: EventsIndexRoute,
+}
+
+const EventsRouteWithChildren =
+  EventsRoute._addFileChildren(EventsRouteChildren)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/events': typeof EventsIndexRoute
+  '/events': typeof EventsRouteWithChildren
+  '/events/$eventId': typeof EventsEventIdRoute
+  '/events/': typeof EventsIndexRoute
   '/newsletter': typeof NewsletterIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/events/$eventId': typeof EventsEventIdRoute
   '/events': typeof EventsIndexRoute
   '/newsletter': typeof NewsletterIndexRoute
 }
@@ -80,28 +124,36 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/events': typeof EventsRouteWithChildren
+  '/events/$eventId': typeof EventsEventIdRoute
   '/events/': typeof EventsIndexRoute
   '/newsletter/': typeof NewsletterIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/events' | '/newsletter'
+  fullPaths: '/' | '/events' | '/events/$eventId' | '/events/' | '/newsletter'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/events' | '/newsletter'
-  id: '__root__' | '/' | '/events/' | '/newsletter/'
+  to: '/' | '/events/$eventId' | '/events' | '/newsletter'
+  id:
+    | '__root__'
+    | '/'
+    | '/events'
+    | '/events/$eventId'
+    | '/events/'
+    | '/newsletter/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  EventsIndexRoute: typeof EventsIndexRoute
+  EventsRoute: typeof EventsRouteWithChildren
   NewsletterIndexRoute: typeof NewsletterIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  EventsIndexRoute: EventsIndexRoute,
+  EventsRoute: EventsRouteWithChildren,
   NewsletterIndexRoute: NewsletterIndexRoute,
 }
 
@@ -116,15 +168,27 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/events/",
+        "/events",
         "/newsletter/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
+    "/events": {
+      "filePath": "events.tsx",
+      "children": [
+        "/events/$eventId",
+        "/events/"
+      ]
+    },
+    "/events/$eventId": {
+      "filePath": "events/$eventId.tsx",
+      "parent": "/events"
+    },
     "/events/": {
-      "filePath": "events/index.tsx"
+      "filePath": "events/index.tsx",
+      "parent": "/events"
     },
     "/newsletter/": {
       "filePath": "newsletter/index.tsx"
