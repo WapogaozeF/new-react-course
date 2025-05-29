@@ -29,7 +29,7 @@ export const Route = createFileRoute("/events/$eventId")({
 	component: RouteComponent,
 	loader: async ({ params }) => {
 		return {
-			event: loadEvent(params.eventId),
+			event: await loadEvent(params.eventId),
 			events: loadEvents(),
 		};
 	},
@@ -40,11 +40,7 @@ function RouteComponent() {
 
 	return (
 		<>
-			<Suspense fallback={<p style={{ textAlign: "center" }}>Loading...</p>}>
-				<Await promise={event}>
-					{(loadedEvent) => <EventItem event={loadedEvent} />}
-				</Await>
-			</Suspense>
+			<EventItem event={event} />
 			<Suspense fallback={<p style={{ textAlign: "center" }}>Loading...</p>}>
 				<Await promise={events}>
 					{(loadedEvents) => <EventsList events={loadedEvents} />}

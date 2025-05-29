@@ -12,6 +12,9 @@ function EventsNavigation() {
 							activeProps={{
 								className: classes.active,
 							}}
+							activeOptions={{
+								exact: true,
+							}}
 						>
 							All Events
 						</Link>
