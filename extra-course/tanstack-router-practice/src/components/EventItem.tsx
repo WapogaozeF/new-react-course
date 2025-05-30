@@ -1,19 +1,26 @@
-// import { Link, useSubmit } from "react-router-dom";
-
 import type React from "react";
 import type { Event } from "../types/event";
 import classes from "./EventItem.module.css";
+import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
+import { deleteEvent } from "../queries/mutations/deleteEvent";
 // import { Link } from "@tanstack/react-router";
 
 const EventItem: React.FC<{ event: Event }> = ({ event }) => {
-	// const submit = useSubmit();
+	const navigate = useNavigate();
 
-	function startDeleteHandler() {
-		// const proceed = window.confirm("Are you sure?");
+	const mutation = useMutation(deleteEvent(event.id));
 
-		// if (proceed) {
-		// 	submit(null, { method: "delete" });
-		// }
+	async function startDeleteHandler() {
+		const proceed = window.confirm("Are you sure?");
+		if (proceed) {
+			try {
+				await mutation.mutateAsync();
+				navigate({ to: "/events" });
+			} catch (err) {
+				if (err instanceof Error) alert(`Something went wrong: ${err.message}`);
+			}
+		}
 	}
 
 	return (
@@ -24,7 +31,9 @@ const EventItem: React.FC<{ event: Event }> = ({ event }) => {
 			<p>{event.description}</p>
 			<menu className={classes.actions}>
 				{/* <Link to="edit">Edit</Link> */}
-				<button onClick={startDeleteHandler}>Delete</button>
+				<button type="button" onClick={startDeleteHandler}>
+					Delete
+				</button>
 			</menu>
 		</article>
 	);
