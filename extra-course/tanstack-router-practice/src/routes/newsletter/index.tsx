@@ -1,9 +1,15 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from "@tanstack/react-router";
+import NewsletterSignup from "../../components/NewsletterSignup";
+import PageContent from "../../components/PageContent";
 
-export const Route = createFileRoute('/newsletter/')({
-  component: RouteComponent,
-})
+export const Route = createFileRoute("/newsletter/")({
+	component: NewsletterSComponent,
+});
 
-function RouteComponent() {
-  return <div>Hello "/newsletter/"!</div>
+function NewsletterSComponent() {
+	return (
+		<PageContent title="Join our awesome newsletter!">
+			<NewsletterSignup />
+		</PageContent>
+	);
 }
