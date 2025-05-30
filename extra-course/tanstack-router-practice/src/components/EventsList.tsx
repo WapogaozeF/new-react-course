@@ -12,6 +12,7 @@ const EventsList: React.FC<Events> = ({ events }) => {
 				{events.map((event) => (
 					<li key={event.id} className={classes.item}>
 						<Link
+							preload="intent"
 							to="/events/$eventId"
 							params={{
 								eventId: event.id,
