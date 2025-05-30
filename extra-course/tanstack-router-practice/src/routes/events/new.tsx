@@ -1,9 +1,11 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute('/events/new')({
-  component: RouteComponent,
-})
+import EventForm from "../../components/EventForm";
+
+export const Route = createFileRoute("/events/new")({
+	component: RouteComponent,
+});
 
 function RouteComponent() {
-  return <div>Hello "/events/new"!</div>
+	return <EventForm method="POST" />;
 }

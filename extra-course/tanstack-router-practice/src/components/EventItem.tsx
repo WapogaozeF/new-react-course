@@ -1,10 +1,13 @@
-import type React from "react";
-import type { Event } from "../types/event";
-import classes from "./EventItem.module.css";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { deleteEvent } from "../queries/mutations/deleteEvent";
-// import { Link } from "@tanstack/react-router";
+
+import { Link } from "@tanstack/react-router";
+
+import classes from "./EventItem.module.css";
+
+import type React from "react";
+import type { Event } from "../types/event";
 
 const EventItem: React.FC<{ event: Event }> = ({ event }) => {
 	const navigate = useNavigate();
@@ -30,7 +33,9 @@ const EventItem: React.FC<{ event: Event }> = ({ event }) => {
 			<time>{event.date}</time>
 			<p>{event.description}</p>
 			<menu className={classes.actions}>
-				{/* <Link to="edit">Edit</Link> */}
+				<Link params={{ eventId: event.id }} to="/events/$eventId/edit">
+					Edit
+				</Link>
 				<button type="button" onClick={startDeleteHandler}>
 					Delete
 				</button>

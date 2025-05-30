@@ -9,3 +9,10 @@ export type Event = {
 	image: string;
 	title: string;
 };
+
+export type EventData = {
+	title: string;
+	image: string;
+	date: string;
+	description: string;
+};

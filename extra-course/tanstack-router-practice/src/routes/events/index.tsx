@@ -1,8 +1,10 @@
+import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import EventsList from "../../components/EventsList";
+
 import { queryClient } from "../../queryClient";
 import { eventsQuery } from "../../queries/events";
-import { useQuery } from "@tanstack/react-query";
+
+import EventsList from "../../components/EventsList";
 
 export const Route = createFileRoute("/events/")({
 	component: RouteComponent,
