@@ -4,13 +4,14 @@ import "./index.css";
 
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-const queryClient = new QueryClient()
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "./queryClient";
 
 // Create a new router instance
 const router = createRouter({
 	routeTree,
+	context: { queryClient },
 	defaultPreloadStaleTime: 0,
 });
 

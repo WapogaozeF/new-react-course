@@ -1,31 +1,24 @@
-import { Await, createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import EventsList from "../../components/EventsList";
-import { Suspense } from "react";
-
-const loader = async () => {
-	const promise = fetch("http://localhost:8080/events").then((res) => {
-		if (!res.ok) throw new Error("Could not fetch events.");
-		return res.json();
-	});
-
-	return {
-		events: promise,
-	};
-};
+import { queryClient } from "../../queryClient";
+import { eventsQuery } from "../../queries/events";
+import { useQuery } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/events/")({
 	component: RouteComponent,
-	loader,
+	loader: () => queryClient.ensureQueryData(eventsQuery),
 });
 
 function RouteComponent() {
-	const { events } = Route.useLoaderData();
+	const { data: events, isLoading, isError, error } = useQuery(eventsQuery);
 
-	return (
-		<Suspense fallback={<p style={{ textAlign: "center" }}>Loading...</p>}>
-			<Await promise={events}>
-				{(data) => <EventsList events={data.events} />}
-			</Await>
-		</Suspense>
-	);
+	if (isLoading) {
+		return <p style={{ textAlign: "center" }}>Loading...</p>;
+	}
+
+	if (isError) {
+		return <p style={{ textAlign: "center", color: "red" }}>{error.message}</p>;
+	}
+
+	return <EventsList events={events} />;
 }

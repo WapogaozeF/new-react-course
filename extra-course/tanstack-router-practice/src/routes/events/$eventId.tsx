@@ -1,50 +1,46 @@
-import { Await, createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { Suspense } from "react";
 import EventItem from "../../components/EventItem";
 import EventsList from "../../components/EventsList";
-
-async function loadEvent(id: string) {
-	const response = await fetch(`http://localhost:8080/events/${id}`);
-
-	if (!response.ok) {
-		throw new Error("Could not fetch event.");
-	}
-
-	const resData = await response.json();
-	return resData.event;
-}
-
-async function loadEvents() {
-	const response = await fetch("http://localhost:8080/events");
-
-	if (!response.ok) {
-		throw new Error("Could not fetch events.");
-	}
-
-	const resData = await response.json();
-	return resData.events;
-}
+import { queryClient } from "../../queryClient";
+import { eventQuery } from "../../queries/event";
+import { eventsQuery } from "../../queries/events";
+import { useQuery } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/events/$eventId")({
-	component: RouteComponent,
+	component: EventDetailPage,
 	loader: async ({ params }) => {
-		return {
-			event: await loadEvent(params.eventId),
-			events: loadEvents(),
-		};
+		await queryClient.ensureQueryData(eventQuery(params.eventId));
+		return { eventId: params.eventId };
 	},
 });
 
-function RouteComponent() {
-	const { event, events } = Route.useLoaderData();
+function EventDetailPage() {
+	const { eventId } = Route.useLoaderData();
+
+	const {
+		data: event,
+		isLoading: eventLoading,
+		isError: eventError,
+	} = useQuery(eventQuery(eventId));
+
+	const {
+		data: events,
+		isLoading: eventsLoading,
+		isError: eventsError,
+	} = useQuery(eventsQuery);
+
+	if (eventLoading)
+		return <p style={{ textAlign: "center" }}>Loading event...</p>;
+	if (eventError) return <p>Error loading event</p>;
 
 	return (
 		<>
 			<EventItem event={event} />
-			<Suspense fallback={<p style={{ textAlign: "center" }}>Loading...</p>}>
-				<Await promise={events}>
-					{(loadedEvents) => <EventsList events={loadedEvents} />}
-				</Await>
+			<Suspense
+				fallback={<p style={{ textAlign: "center" }}>Loading events...</p>}
+			>
+				{!eventsLoading && !eventsError && <EventsList events={events} />}
 			</Suspense>
 		</>
 	);
